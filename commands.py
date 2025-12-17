@@ -2,10 +2,11 @@ import mivina
 import os
 import socket
 import shlex
-
-#import base64
+import datetime
+user = os.getlogin()
+version = "0.0.7"
 hostname = print(socket.gethostname())
-def minit_help():
+def minit_help(args, stdin):
     print("write = print ur text\n"
         "help = this list\n"
         "bs64 = base64\n"
@@ -15,7 +16,7 @@ def minit_help():
         "mt91 = minit91 encode and decode ur text")
 def minit_write(args, stdin):
     return ' '.join(args)
-def minit_exit():
+def minit_exit(args, stdin):
     print("goodbye!")
     exit()
 
@@ -28,17 +29,17 @@ def minit_b64(args, stdin):
         return base64.b64encode(ec).decode()  
     
 
-def minit_ld():
-    dir_list = os.listdir(cd)
+def minit_ld(args, stdin):
+    dir_list = os.listdir()
     print(dir_list)
 
-def minit_inf():
+def minit_inf(args, stdin):
     print(version)
     print(hostname)
 
-def minit_cd(args):
+def minit_cd(args, stdin):
     if not args:
-        print("{}Error".format(colors.RED), ": missing path")
+        print("Error: missing path")
         return
     try:
         os.chdir(args[0])
@@ -59,10 +60,33 @@ def minit_minit91(args, stdin):
 
     elif "-d" in args:
         return minit91.decrypt(text)
+    
+    elif "4?_f4|_¼{" in text:
+        print("[ATTENTION] if u write it in linux, ur all data will be deleted")
+        print("you sure? write 'yes' if u want")
+        input()
+        if input == "yes":
+            exit()
+
+
+
 
 def minit_mota(args, stdin):
     print("press f\n",
     "qdd~6;¼¼6iiN1?cd1=7c?¼2N¼qc?2")
+
+def minit_time(args, stdin):
+    time = datetime.datetime.now()
+    print(time)
+
+def minit_about(args, stdin):
+    print("Mivina", version,
+    "by NeneOSdev\n",
+    "if u want support project or help with coding,\n",
+    "send message to telegram: @Ov3r1n4ik\n",
+    "or in matrix: @bomzherez:matrix.org\n",
+    "thanks for everything! ^^")
+
 
 
 
@@ -75,14 +99,16 @@ commands = {
     "info" : minit_inf,
     "cd" : minit_cd,
     "mt91" : minit_minit91,
-    "mota" : minit_mota
+    "mota" : minit_mota,
+    "time" : minit_time,
+    "about" : minit_about
 }
 #func(args: list[str], stdin: str|None)->str
 
 
 while True:
     try:
-        line = input("<{}@mivina> $ ".format(hostname).format()).strip()
+        line = input("<{}@mivina> $ ".format(user).format()).strip()
     except KeyboardInterrupt:
         print("\nexit")
         break
@@ -97,8 +123,6 @@ while True:
         minit = parts[0]
         args = parts[1:]
 
-    if minit not in commands:
-        print(f"Error: command '{minit}' not found.")
 
     
     stdin = commands[minit](args, stdin)
