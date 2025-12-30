@@ -1,5 +1,4 @@
 import subprocess
-import mivina
 import os
 import socket
 import shlex
@@ -7,6 +6,11 @@ import sys
 import datetime
 import random
 import string
+import mivina_api
+import importlib.util
+from mivina_api import register_command
+import mivina
+from mivina_api import get_commandy
 user = os.getlogin()
  #REPO_URL="https://github.com/NeneOSdev/Mivina.git"
 version = "0.0.7_02"
@@ -18,14 +22,17 @@ def minit_help(args, stdin):
     print("write = print ur text\n"
         "help = this list\n"
         "bs64 = base64\n"
-        "inf = info\n"
+        "info = info\n"
         "ld = list\n"
         "cd = cd\n"
         "mt91 = minit91 encode and decode ur text\n"
         "about = about the project\n"
-        "time = when school?")
+        "time = when school?\n"
+        "clear = clear a terminal\n"
+        "mkdir = create folder\n"
+        "lp = plugin list")
 def minit_write(args, stdin):
-    return '" "'.join(args)
+    return ' '.join(args)
 def minit_exit(args, stdin):
     print("goodbye!")
     exit()
@@ -155,12 +162,13 @@ def minit_time(args, stdin):
     print(time)
 
 def minit_about(args, stdin):
-    print("Mivina", version,
-    "by NeneOSdev\n",
+    print(" #########Mivina", version,
+    "by NeneOSdev########\n",
     "=============================================\n",
     "if u want support project or help with coding,\n",
     "send message to telegram: @Ov3r1n4ik\n",
-    "or in matrix: @bomzherez:matrix.org\n",
+    "or in matrix: @ikirusan:extera.xyz\n",
+    "we have a telegram group: t.me/MivinaCommunity\n"
     "=============================================\n",
     "thanks for everything! ^^")
 
@@ -172,28 +180,37 @@ def minit_eqqpsd(args, stdin):
     
     psdg = "".join(random.choices(string.ascii_letters + string.digits, k=16))
     print("Password for eqq:", psdg)
+
+def minit_pluginList(args, stdin):
+    from plugins_loader import loaded_plugins
+
+    if not loaded_plugins:
+        print("[Mivina]: plugins not found.")
+        return
+
+    print("[Mivina]: loaded plugins:")
+    for p in loaded_plugins:
+        print(" -", p)
+
     
-    
-commands = {
-    "help" : minit_help, 
-    "write": minit_write,
-    "bs64" : minit_b64,
-    "ld" : minit_ld,
-    "exit" : minit_exit,
-    "info" : minit_inf,
-    "cd" : minit_cd,
-    "mt91" : minit_minit91,
-    "mota" : minit_mota,
-    "time" : minit_time,
-    "about" : minit_about,
-    #"update" : minit_update,
-    #"check-update" : check_updates,
-    "mkdir" : minit_mkdir,
-    "eqqpsd" : minit_eqqpsd,
-    "ewq" : minit_checkFile,
-    "lamron" : minit_lamron,
-    "clear" : minit_clear
-}
+register_command("help", minit_help)
+register_command("write", minit_write)
+register_command("bs64", minit_b64)
+register_command("ld", minit_ld)
+register_command("exit", minit_exit)
+register_command("info", minit_inf)
+register_command("cd", minit_cd)
+register_command("mt91" , minit_minit91)
+register_command("mota", minit_mota)
+register_command("time", minit_time)
+register_command("about", minit_about)
+register_command("mkdir", minit_mkdir)
+register_command("eqqpsd", minit_eqqpsd)
+register_command("clear", minit_clear)
+register_command("lp", minit_pluginList)
+
+
+
 #func(args: list[str], stdin: str|None)->str
 
 
@@ -208,6 +225,10 @@ while True:
             parts = stage.split()
             minit = parts[0]
             args = parts[1:]
+            commands = get_commandy()
+        if not minit in commands:
+            print("[Error]: unknown command: {}".format(minit))
+            continue
         stdin = commands[minit](args, stdin)
         if stdin is not None:
             print(stdin)
