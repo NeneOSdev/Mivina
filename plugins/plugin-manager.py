@@ -13,8 +13,6 @@ RAW_BASE = "https://raw.githubusercontent.com/NeneOSdev/mivina-plugin-repo/maste
 
 def plugin_install(name):
     plugins = fetch_plugins()
-    print(plugins)
-    print(name)
 
     if not name in plugins:
         print("Plugin not found")
