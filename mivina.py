@@ -14,7 +14,7 @@ user = os.getlogin()
 splash = ["try Extera Next!", "Bingo!", "write Hello {}!".format(user),
 "Sore no sakana!"]
 random_splash = random.choice(splash)
-version = "0.0.7_02"
+version = "0.0.8"
 cd = os.getcwd()
 hostname = print(socket.gethostname())
 print(cfonts.render("Mivina", font='block', size=(80, 24), colors=0, background='transparent',

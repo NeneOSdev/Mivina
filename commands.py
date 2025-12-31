@@ -13,7 +13,7 @@ import mivina
 from mivina_api import get_commandy
 user = os.getlogin()
  #REPO_URL="https://github.com/NeneOSdev/Mivina.git"
-version = "0.0.7_02"
+version = "0.0.8"
 hostname = print(socket.gethostname())
 
 def minit_clear(args, stdin):
@@ -106,14 +106,10 @@ def minit_checkFile(args, stdin):
     else:
         print("[Error]: Permission Denied")
 
-def minit_lamron(args, stdin):
-    import lamron
-    l = lamron()
-    l.start()
-
 def minit_ld(args, stdin):
     dir_list = os.listdir()
     print(dir_list)
+
 
 def minit_inf(args, stdin):
     print(version)
@@ -131,24 +127,6 @@ def minit_cd(args, stdin):
         print(f"cd: Its not a directory: {args[0]}")
     except PermissionError:
         print(f"cd: Permission denied: {args[0]}")
-
-def minit_minit91(args, stdin):
-    import minit91
-    mode, *text = line.split(maxsplit=1)
-    text = text[0] if text else ""
-    text = text.lower()
-    if "-e" in args:
-        return minit91.encrypt(text)
-
-    elif "-d" in args:
-        return minit91.decrypt(text)
-    
-    elif "4?_f4|_¼{" in text:
-        print("[ATTENTION] if u write it in linux, ur all data will be deleted")
-        print("you sure? write 'yes' if u want")
-        input()
-        if input() == "yes":
-            exit()
 
 
 
@@ -200,7 +178,6 @@ register_command("ld", minit_ld)
 register_command("exit", minit_exit)
 register_command("info", minit_inf)
 register_command("cd", minit_cd)
-register_command("mt91" , minit_minit91)
 register_command("mota", minit_mota)
 register_command("time", minit_time)
 register_command("about", minit_about)
@@ -217,6 +194,9 @@ register_command("lp", minit_pluginList)
 while True:
     try:
         line = input("<{}@mivina> $ ".format(user).format()).strip()
+        if not line:
+            continue
+
         backslash = [x.strip() for x in line.split("|")]
 
         stdin = None
@@ -229,7 +209,7 @@ while True:
         if not minit in commands:
             print("[Error]: unknown command: {}".format(minit))
             continue
-        stdin = commands[minit](args, stdin)
+        stdin = commands[minit](args, stdin) 
         if stdin is not None:
             print(stdin)
 
