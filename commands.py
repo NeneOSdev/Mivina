@@ -9,7 +9,7 @@ import string
 import mivina_api
 import importlib.util
 from mivina_api import register_command
-import mivina
+
 from mivina_api import get_commandy
 user = os.getlogin()
  #REPO_URL="https://github.com/NeneOSdev/Mivina.git"
@@ -190,33 +190,33 @@ register_command("lp", minit_pluginList)
 
 #func(args: list[str], stdin: str|None)->str
 
-
-while True:
-    try:
-        line = input("<{}@mivina> $ ".format(user).format()).strip()
+def command_loop():
+    while True:
+        try:
+            line = input("<{}@mivina> $ ".format(user).format()).strip()
+            if not line:
+                continue
+            
+            backslash = [x.strip() for x in line.split("|")]
+    
+            stdin = None
+            minit = None
+            for stage in backslash:
+                parts = stage.split()
+                minit = parts[0]
+                args = parts[1:]
+                commands = get_commandy()
+            if not minit in commands:
+                print("[Error]: unknown command: {}".format(minit))
+                continue
+            stdin = commands[minit](args, stdin) 
+            if stdin is not None:
+                print(stdin)
+    
+        except KeyboardInterrupt:
+            print("\nexit")
+            break
         if not line:
             continue
-
-        backslash = [x.strip() for x in line.split("|")]
-
-        stdin = None
-        minit = None
-        for stage in backslash:
-            parts = stage.split()
-            minit = parts[0]
-            args = parts[1:]
-            commands = get_commandy()
-        if not minit in commands:
-            print("[Error]: unknown command: {}".format(minit))
-            continue
-        stdin = commands[minit](args, stdin) 
-        if stdin is not None:
-            print(stdin)
-
-    except KeyboardInterrupt:
-        print("\nexit")
-        break
-    if not line:
-        continue
 
  

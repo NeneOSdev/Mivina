@@ -1,6 +1,6 @@
 #  mivina
 
-minimal shell writed on Python.
+minimal shell written in Python.
 
 # what u can
 - pipe (`|`)
@@ -10,7 +10,7 @@ minimal shell writed on Python.
 # how to install
 ```bash
 git clone https://github.com/NeneOSdev/Mivina.git && cd Mivina
-pip install cfonts
+pip install -r requirements.txt
 python3 mivina.py
 ```
 good luck!
